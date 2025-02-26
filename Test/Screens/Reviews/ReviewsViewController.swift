@@ -43,5 +43,4 @@ private extension ReviewsViewController {
             reviewsView?.tableView.reloadData()
         }
     }
-
 }
