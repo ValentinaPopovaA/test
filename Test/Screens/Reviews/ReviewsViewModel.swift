@@ -80,10 +80,12 @@ private extension ReviewsViewModel {
 
     func makeReviewItem(_ review: Review) -> ReviewItem {
         let avatarImage = UIImage(named: "default_avatar")
+        let userName = "\(review.first_name) \(review.last_name)".attributed(font: .username)
         let reviewText = review.text.attributed(font: .text)
         let created = review.created.attributed(font: .created, color: .created)
         let item = ReviewItem(
             avatarImage: avatarImage,
+            userName: userName,
             reviewText: reviewText,
             created: created,
             onTapShowMore: showMoreReview
