@@ -49,7 +49,9 @@ private extension ReviewsViewModel {
         do {
             let data = try result.get()
             let reviews = try decoder.decode(Reviews.self, from: data)
+            state.items.removeAll { $0 is ReviewCountCellConfig }
             state.items += reviews.items.map(makeReviewItem)
+            state.items.append(makeReviewCountItem(reviews.count))
             state.offset += state.limit
             state.shouldLoad = state.offset < reviews.count
         } catch {
@@ -69,6 +71,18 @@ private extension ReviewsViewModel {
         state.items[index] = item
         onStateChange?(state)
     }
+    
+    /// Метод форматирует количество отзывов с правильным склонением
+    static func formatReviewCount(_ count: Int) -> String {
+        let suffix: String
+        switch (count % 10, count % 100) {
+        case (1, 11...20): suffix = "отзывов"
+        case (1, _): suffix = "отзыв"
+        case (2...4, _): suffix = "отзыва"
+        default: suffix = "отзывов"
+        }
+        return "\(count) \(suffix)"
+    }
 
 }
 
@@ -77,6 +91,7 @@ private extension ReviewsViewModel {
 private extension ReviewsViewModel {
 
     typealias ReviewItem = ReviewCellConfig
+    typealias ReviewCountItem = ReviewCountCellConfig
 
     func makeReviewItem(_ review: Review) -> ReviewItem {
         let avatarImage = UIImage(named: "default_avatar")
@@ -91,6 +106,14 @@ private extension ReviewsViewModel {
             reviewText: reviewText,
             created: created,
             onTapShowMore: showMoreReview
+        )
+        return item
+    }
+    
+    func makeReviewCountItem(_ count: Int) -> ReviewCountItem {
+        let reviewCountText = ReviewsViewModel.formatReviewCount(count).attributed(font: .reviewCount, color: .reviewCount)
+        let item = ReviewCountItem(
+            reviewCountText: reviewCountText
         )
         return item
     }

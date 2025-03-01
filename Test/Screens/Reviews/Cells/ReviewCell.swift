@@ -5,10 +5,10 @@ struct ReviewCellConfig {
 
     /// Идентификатор для переиспользования ячейки.
     static let reuseId = String(describing: ReviewCellConfig.self)
-    /// Изображение аватара
-    let avatarImage: UIImage?
     /// Идентификатор конфигурации. Можно использовать для поиска конфигурации в массиве.
     let id = UUID()
+    /// Изображение аватара
+    let avatarImage: UIImage?
     /// Имя и фамилия пользователя
     let userName: NSAttributedString
     /// Изображение рейтинга
