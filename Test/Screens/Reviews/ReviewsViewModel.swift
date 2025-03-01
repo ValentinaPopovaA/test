@@ -54,10 +54,16 @@ private extension ReviewsViewModel {
             state.items.append(makeReviewCountItem(reviews.count))
             state.offset += state.limit
             state.shouldLoad = state.offset < reviews.count
+            
+            DispatchQueue.main.async {
+                self.onStateChange?(self.state)
+            }
         } catch {
-            state.shouldLoad = true
+            DispatchQueue.main.async { [weak self] in
+                self?.state.shouldLoad = true
+                self?.onStateChange?(self!.state)
+            }
         }
-        onStateChange?(state)
     }
 
     /// Метод, вызываемый при нажатии на кнопку "Показать полностью...".
