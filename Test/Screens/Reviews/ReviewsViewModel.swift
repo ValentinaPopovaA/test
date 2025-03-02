@@ -76,7 +76,9 @@ private extension ReviewsViewModel {
     else { return }
     item.maxLines = .zero
     state.items[index] = item
-    onStateChange?(state)
+    DispatchQueue.main.async {
+      self.onStateChange?(self.state)
+    }
   }
   
   /// Метод форматирует количество отзывов с правильным склонением
